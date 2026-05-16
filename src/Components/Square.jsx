@@ -1,14 +1,12 @@
-function handleButton() {
-// TODO
-}
 
-function Square({value}) {
+
+function Square({index, value, handleClick}) {
     return (
         <>
-            <button className="square-btn">{value}</button>
+            <button className="square" onClick={() => handleClick(index)}>{value}</button>
         </>
     )
     
 }
 
-export default Square
+export default Square;
