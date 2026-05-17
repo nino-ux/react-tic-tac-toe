@@ -1,8 +1,42 @@
 import Square from "./Square";
 
-function Board({ squares, handleClick }) {
+function Board({
+  squares,
+  setSquares,
+  currentMove,
+  setCurrentMove,
+  handleClick,
+  calculateWinner,
+  isXNext
+}) {
+
+  function handleClick(value) {
+
+    //Place X or O if the square is empty
+    if (!squares[value] && !winner) {
+      const nextSquares = squares.slice();
+      if (isXNext) {
+        nextSquares[value] = 'X';
+      } else {
+        nextSquares[value] = 'O';
+      }
+      setSquares(nextSquares);
+      setCurrentMove(currentMove + 1);
+      calculateWinner(nextSquares);
+    }
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) {
+    status = 'Winner: ' + winner;
+  } else {
+    status = 'Next player: ' + (isXNext ? 'X' : 'O');
+  }
+
   return (
     <>
+      <div className="status">{status}</div>
       <div className="board-row">
         <Square
           index={0}
