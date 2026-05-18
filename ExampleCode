@@ -1,0 +1,155 @@
+import { useState } from "react";
+import "./styles.css";
+
+// ========== Logic (pure functions) ==========
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let [a, b, c] of lines) {
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+
+function makeMove(squares, index, xIsNext) {
+  if (calculateWinner(squares) || squares[index]) {
+    return null;
+  }
+  const nextSquares = squares.slice();
+  nextSquares[index] = xIsNext ? "X" : "O";
+  return nextSquares;
+}
+
+function getStatus(squares, xIsNext) {
+  const winner = calculateWinner(squares);
+  if (winner) {
+    return `Winner: ${winner}`;
+  }
+  if (squares.every(Boolean)) {
+    return "Draw";
+  }
+  return `Next player: ${xIsNext ? "X" : "O"}`;
+}
+
+function pushHistory(history, currentMove, nextSquares) {
+  const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+  return [nextHistory, nextHistory.length - 1];
+}
+
+// ========== View Model (combines state/setState with logic) ==========
+
+function getGameProps(state, setState) {
+  const xIsNext = state.currentMove % 2 === 0;
+  const currentSquares = state.history[state.currentMove];
+
+  const onPlay = (nextSquares) => {
+    const [newHistory, newCurrentMove] = pushHistory(
+      state.history,
+      state.currentMove,
+      nextSquares
+    );
+    setState({ history: newHistory, currentMove: newCurrentMove });
+  };
+
+  const onSquareClick = (index) => {
+    const newSquares = makeMove(currentSquares, index, xIsNext);
+    if (newSquares) {
+      onPlay(newSquares);
+    }
+  };
+
+  const moves = state.history.map((_, move) => ({
+    description: move > 0 ? `Go to move #${move}` : "Go to game start",
+    onClick: () => setState((prev) => ({ ...prev, currentMove: move })),
+  }));
+
+  return {
+    boardProps: {
+      squares: currentSquares,
+      status: getStatus(currentSquares, xIsNext),
+      onSquareClick,
+    },
+    moves,
+  };
+}
+
+// ========== View (presentational components) ==========
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+function Board({ squares, status, onSquareClick }) {
+  const renderSquare = (i) => (
+    <Square key={i} value={squares[i]} onSquareClick={() => onSquareClick(i)} />
+  );
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        {renderSquare(0)}
+        {renderSquare(1)}
+        {renderSquare(2)}
+      </div>
+      <div className="board-row">
+        {renderSquare(3)}
+        {renderSquare(4)}
+        {renderSquare(5)}
+      </div>
+      <div className="board-row">
+        {renderSquare(6)}
+        {renderSquare(7)}
+        {renderSquare(8)}
+      </div>
+    </>
+  );
+}
+
+function Game({ boardProps, moves }) {
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board {...boardProps} />
+      </div>
+      <div className="game-info">
+        <ol>
+          {moves.map((m, i) => (
+            <li key={i}>
+              <button onClick={m.onClick}>{m.description}</button>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  );
+}
+
+// ========== Entry Point ==========
+
+const DEFAULT_STATE = {
+  history: [Array(9).fill(null)],
+  currentMove: 0,
+};
+
+export default function App() {
+  const [state, setState] = useState(DEFAULT_STATE);
+  const gameProps = getGameProps(state, setState);
+  return <Game {...gameProps} />;
+}
+
