@@ -1,5 +1,5 @@
 
-function Square({index, value, handleClick}) {
+function Square() {
 
 }
 

@@ -10,7 +10,7 @@ import Board from "./Components/Board";
 //Representational components
 
 
-function Game({}) {
+function Game() {
 }
 
 
@@ -20,6 +20,6 @@ const DEFAULT_STATE = {
 
 };
 
-export default function App({}) {
+export default function App() {
 
 }
