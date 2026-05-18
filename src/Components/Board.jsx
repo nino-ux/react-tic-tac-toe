@@ -1,8 +1,9 @@
 import Square from "./Square";
 
 function Board({
+  handlePlay,
   squares,
-  setSquares,
+  // setSquares,
   currentMove,
   setCurrentMove,
   handleClick,
@@ -20,9 +21,13 @@ function Board({
       } else {
         nextSquares[value] = 'O';
       }
-      setSquares(nextSquares);
-      setCurrentMove(currentMove + 1);
+      // setSquares(nextSquares);
+      // setCurrentMove(currentMove + 1);
+
+      handlePlay(nextSquares);
+
       calculateWinner(nextSquares);
+
     }
   }
 

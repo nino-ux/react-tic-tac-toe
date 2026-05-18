@@ -3,23 +3,59 @@ import Square from "./Components/Square";
 import Board from "./Components/Board";
 
 function Game() {
-  const [squares, setSquares] = useState(Array(9).fill(null));
+  // const [squares, setSquares] = useState(Array(9).fill(null));
+  const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
-  const isXNext = (currentMove % 2 === 0);
+  const currentSquares = history[currentMove];
+  const [isXNext, setIsXNext] = useState('true');
+  // const isXNext = (currentMove % 2 === 0);
 
-  // const winner = calculateWinner(squares);
+  function handlePlay(nextSquares) {
+    const nextHistory = [...history.slice(0, currentMove + 1,), nextSquares];
+    setHistory(nextHistory);
+    setCurrentMove(nextHistory.length - 1);
+    setIsXNext(!isXNext);
+  }
+
+  function goToMove(nextMove) {
+    setCurrentMove(nextMove);
+    setIsXNext(nextMove % 2 === 0);
+  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = "Go to the move #" + move;
+    } else { description = "Go to game start" }
+
+    return (
+      <li key={move}>
+        <button onClick={() => goToMove(move)}>{description}</button>
+      </li>
+    )
+  })
+
 
   return (
     <>
-      <Board
-        squares={squares}
-        setSquares={setSquares}
-        currentMove={currentMove}
-        setCurrentMove={setCurrentMove}
-        isXNext={isXNext}
-        calculateWinner={calculateWinner}
-      />
-      <div>Current move: {currentMove}</div>
+      <div className="game">
+        <Board
+          squares={currentSquares}
+          // setSquares={setSquares}
+          handlePlay={handlePlay}
+          history={history}
+          setHistory={setHistory}
+          currentMove={currentMove}
+          setCurrentMove={setCurrentMove}
+          isXNext={isXNext}
+          calculateWinner={calculateWinner}
+        />
+      </div >
+      <div className="game-info">
+        <ol>
+          {moves}
+        </ol>
+      </div>
     </>
   )
 }
