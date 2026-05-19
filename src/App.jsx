@@ -4,11 +4,12 @@ import Board from "./Components/Board";
 import Game from "./Components/Game";
 
 //Pure Functions
-function makeMove(squares, currentSquare) {
+function makeMove(squares, currentSquare, currentMove) {
   const nextSquares = squares.slice();
-  nextSquares[currentSquare] = "X";
+  
+  nextSquares[currentSquare] = (currentMove % 2 === 0) ? "X" : "O"
 
-  console.log(nextSquares)
+  console.log(currentMove)
 
   return nextSquares
 
@@ -19,19 +20,23 @@ function makeMove(squares, currentSquare) {
 
 function getGameProps(state, setState) {
 //vars
-const currentSquares = state.history[0];
+
+const currentMove = state.currentMove;
+const squares = state.history[currentMove];
 
 //event handlers
   function handleClick(index) {
     
-    const updatedSquares = makeMove(state.history[0], index)
+    const updatedSquares = makeMove(squares, index, currentMove)
 
-    setState({ history: [updatedSquares] })
+    setState({ history: [...state.history, updatedSquares], currentMove: state.currentMove + 1 })
+
+    console.log(state);
   }
 
   return {
     handleClick,
-    currentSquares
+    squares
   }
 
 }
@@ -41,6 +46,7 @@ const currentSquares = state.history[0];
 
 const DEFAULT_STATE = {
   history: [Array(9).fill(null)],
+  currentMove: 0
 };
 
 export default function App() {
@@ -52,7 +58,6 @@ export default function App() {
       {...gameProps}
       setState={setState}
       state={state}
-      setState={setState}
     />
   )
 }

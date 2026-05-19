@@ -1,9 +1,9 @@
 import Square from "./Square";
 
-function Board({ currentSquares, handleClick }) {
+function Board({ squares, handleClick }) {
 
   const renderSquare = (i) => {
-    return <Square index={i} value={currentSquares[i]} handleClick={() => handleClick(i)} />
+    return <Square index={i} value={squares[i]} handleClick={() => handleClick(i)} />
   }
 
   return (

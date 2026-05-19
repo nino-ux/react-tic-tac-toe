@@ -1,8 +1,8 @@
 import Board from "./Board";
 
-function Game({currentSquares, handleClick}) {
+function Game({squares, handleClick}) {
     return (
-        <Board currentSquares={currentSquares} handleClick={handleClick}/>
+        <Board squares={squares} handleClick={handleClick}/>
     )
 }
 

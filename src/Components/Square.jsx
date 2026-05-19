@@ -3,5 +3,4 @@ function Square({index, value, handleClick}) {
         <button className="square" onClick={handleClick}>{value}</button>
     )
 }
-
 export default Square;
