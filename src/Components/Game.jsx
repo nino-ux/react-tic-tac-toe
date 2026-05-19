@@ -1,7 +1,9 @@
 import Board from "./Board";
 
-function Game() {
-
+function Game({currentSquares, handleClick}) {
+    return (
+        <Board currentSquares={currentSquares} handleClick={handleClick}/>
+    )
 }
 
 export default Game;
