@@ -1,10 +1,7 @@
 
-function Square({value}) {
-    return (
-        <>
-            <button>{value}</button>
-        </>
-    )
+
+function Square({index, value, handleClick}) {
+
 }
 
 export default Square;
