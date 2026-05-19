@@ -5,33 +5,53 @@ import Game from "./Components/Game";
 
 //Pure Functions
 function makeMove(squares, currentSquare, currentMove) {
-  const nextSquares = squares.slice();
-  
-  nextSquares[currentSquare] = (currentMove % 2 === 0) ? "X" : "O"
 
-  console.log(currentMove)
+  const nextSquares = squares.slice();
+
+  nextSquares[currentSquare] = (currentMove % 2 === 0) ? "X" : "O"
 
   return nextSquares
 
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8]
+  ]
+
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i]
+    if (squares[a] && squares[a] === squares[b] && squares[b] === squares[c] && squares[c]) {
+      return squares[a];
+    }
+  }
+
+  return null;
 }
 
 //ViewModel (stateful functions)
 
 
 function getGameProps(state, setState) {
-//vars
+  //vars
 
-const currentMove = state.currentMove;
-const squares = state.history[currentMove];
+  const currentMove = state.currentMove;
+  const squares = state.history[currentMove];
 
-//event handlers
+  //event handlers
   function handleClick(index) {
-    
+
+    const winner = calculateWinner(squares);
+
+    if (winner || squares[index]) return
+
     const updatedSquares = makeMove(squares, index, currentMove)
 
     setState({ history: [...state.history, updatedSquares], currentMove: state.currentMove + 1 })
 
-    console.log(state);
+
   }
 
   return {
@@ -56,8 +76,6 @@ export default function App() {
   return (
     <Game
       {...gameProps}
-      setState={setState}
-      state={state}
     />
   )
 }
