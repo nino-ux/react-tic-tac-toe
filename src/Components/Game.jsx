@@ -1,7 +1,11 @@
 import Board from "./Board";
 
-function Game() {
-
+function Game({value}) {
+    return(
+        <>
+            <Board value={value} />
+        </>
+    )    
 }
 
 export default Game;
