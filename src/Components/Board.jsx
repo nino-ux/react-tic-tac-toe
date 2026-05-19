@@ -1,6 +1,7 @@
 import Square from "./Square";
 
-function Board() {    
+function Board() {   
+   
 }
 
 export default Board;

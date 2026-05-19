@@ -11,10 +11,6 @@ import Game from "./Components/Game";
 //Representational components
 
 
-function Game({}) {
-}
-
-
 //Entry point
 
 const DEFAULT_STATE = {
